@@ -294,7 +294,7 @@ void CphhPrjDlg::OnBnClickedBtnChangeColor()
 	backColorRed = _ttoi(sColorRed);
 	backColorGreen = _ttoi(sColorGreen);
 	backColorBlue = _ttoi(sColorBlue);
-	if (backColorRed < 255 && backColorGreen < 255 && backColorBlue < 255) {
+	if (backColorRed < 256 && backColorGreen < 256 && backColorBlue < 256) {
 		if (0 <= backColorRed && 0 <= backColorGreen && 0 <= backColorBlue) {
 			UpdateData();
 			m_editRGB.Format(_T("%s, %s, %s"), sColorRed, sColorGreen, sColorBlue);

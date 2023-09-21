@@ -7,10 +7,13 @@
 #include "phh_Prj.h"
 #include "phh_PrjDlg.h"
 #include "afxdialogex.h"
+#include "DlgImage.h"
+#include <iostream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
@@ -54,17 +57,24 @@ CphhPrjDlg::CphhPrjDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_PHH_PRJ_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
 }
 
 void CphhPrjDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_BTN_MAKE_CIRCLE, m_btnMakeCirecle);
+	DDX_Control(pDX, IDC_EDIT_RAIDUS, m_editRadius);
+	DDX_Control(pDX, IDC_STATIC_Label, m_stcRadius);
+	
 }
 
 BEGIN_MESSAGE_MAP(CphhPrjDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_WM_DESTROY()
+	ON_BN_CLICKED(IDC_BTN_MAKE_CIRCLE, &CphhPrjDlg::OnBnClickedBtnMakeCircle)
 END_MESSAGE_MAP()
 
 
@@ -100,6 +110,17 @@ BOOL CphhPrjDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	MoveWindow(0, 0, 1280, 800);
+
+	m_stcRadius.MoveWindow(1000, 5, 127, 20);
+	m_btnMakeCirecle.MoveWindow(1127, 25, 153, 25);
+	m_editRadius.MoveWindow(1000, 25, 127, 25);
+
+	m_pDlgImage = new CDlgImage;
+	m_pDlgImage->Create(IDD_DLGIMAGE, this);
+	m_pDlgImage->ShowWindow(SW_SHOW);
+	m_pDlgImage->MoveWindow(0, 0, m_pDlgImage->m_Image.GetWidth(), m_pDlgImage->m_Image.GetHeight());
+
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -153,3 +174,21 @@ HCURSOR CphhPrjDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CphhPrjDlg::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+	if (m_pDlgImage)	delete m_pDlgImage;
+}
+
+void CphhPrjDlg::OnBnClickedBtnMakeCircle()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CString strRadius;
+	m_editRadius.GetWindowText(strRadius);
+	int nRadius = _ttoi(strRadius);
+	std::cout << nRadius << std::endl;
+}

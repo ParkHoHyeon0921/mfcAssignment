@@ -55,6 +55,12 @@ END_MESSAGE_MAP()
 
 CphhPrjDlg::CphhPrjDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_PHH_PRJ_DIALOG, pParent)
+	, editCenterX(_T(""))
+	, editCenterY(_T(""))
+	, backColorRed(0)
+	, backColorGreen(0)
+	, backColorBlue(0)
+	, m_editRGB(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
@@ -66,7 +72,14 @@ void CphhPrjDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BTN_MAKE_CIRCLE, m_btnMakeCirecle);
 	DDX_Control(pDX, IDC_EDIT_RAIDUS, m_editRadius);
 	DDX_Control(pDX, IDC_STATIC_Label, m_stcRadius);
-	
+
+	DDX_Text(pDX, IDC_EDIT_CENTER_X, editCenterX);
+	DDX_Text(pDX, IDC_EDIT_CENTER_Y, editCenterY);
+	DDX_Control(pDX, IDC_EDIT_RGB_RED, m_editRGBRed);
+	DDX_Control(pDX, IDC_EDIT_RGB_GREEN, m_editRGBGreen);
+	DDX_Control(pDX, IDC_EDIT_RGB_BLUE, m_editRGBBlue);
+	DDX_Text(pDX, IDC_EDIT_RGB, m_editRGB);
+	DDX_Control(pDX, IDC_EDIT_RGB_VIEW, m_editRGBView);
 }
 
 BEGIN_MESSAGE_MAP(CphhPrjDlg, CDialogEx)
@@ -75,6 +88,7 @@ BEGIN_MESSAGE_MAP(CphhPrjDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(IDC_BTN_MAKE_CIRCLE, &CphhPrjDlg::OnBnClickedBtnMakeCircle)
+	ON_BN_CLICKED(IDC_BTN_CHANGE_COLOR, &CphhPrjDlg::OnBnClickedBtnChangeColor)
 END_MESSAGE_MAP()
 
 
@@ -110,12 +124,8 @@ BOOL CphhPrjDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
-	MoveWindow(0, 0, 1280, 800);
-
-	m_stcRadius.MoveWindow(1000, 5, 127, 20);
-	m_btnMakeCirecle.MoveWindow(1127, 25, 153, 25);
-	m_editRadius.MoveWindow(1000, 25, 127, 25);
-
+	MoveWindow(0, 0, MAIN_WIDTH, MAIN_HEIGHT);
+	
 	m_pDlgImage = new CDlgImage;
 	m_pDlgImage->Create(IDD_DLGIMAGE, this);
 	m_pDlgImage->ShowWindow(SW_SHOW);
@@ -175,20 +185,131 @@ HCURSOR CphhPrjDlg::OnQueryDragIcon()
 }
 
 
-
 void CphhPrjDlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
-	if (m_pDlgImage)	delete m_pDlgImage;
+	if (m_pDlgImage)		delete m_pDlgImage;	
 }
 
 void CphhPrjDlg::OnBnClickedBtnMakeCircle()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_pDlgImage->Invalidate();
+	m_pDlgImage->UpdateWindow();
+
 	CString strRadius;
 	m_editRadius.GetWindowText(strRadius);
-	int nRadius = _ttoi(strRadius);
-	std::cout << nRadius << std::endl;
+	double nDiameter = _tstof(strRadius);
+
+	if (nDiameter > 0) {
+		CRect nRect = rectData(nDiameter);
+		CDC* pDC = m_pDlgImage->GetDC();
+		
+		drawBackColor();
+		drawCircle(pDC, nRect); // 원그리기 기능
+		drawLine(pDC, nRect, 5);  // 중심점 십자가 기능
+		
+		ReleaseDC(pDC);
+	}
+}
+
+
+CRect CphhPrjDlg::rectData(double nDiameter)
+{
+	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
+	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
+	int nCPosL = rand() % int(nCMaxX - nDiameter);
+	int nCPosT = rand() % int(nCMaxY - nDiameter);
+	double nCPosR = nCPosL + nDiameter;
+	double nCPosB = nCPosT + nDiameter;
+	double nSumX = nCPosL + nCPosR;
+	double nSumY = nCPosB + nCPosT;
+	double nCenterX = nSumX / 2.0;
+	double nCenterY = nSumY / 2.0;
+	UpdateData();
+	editCenterX.Format(_T("%f"), nCenterX);
+	editCenterY.Format(_T("%f"), nCenterY);
+	UpdateData(FALSE);
+	
+
+	CRect rect(nCPosL, nCPosT, nCPosR, nCPosB);
+	
+	return rect;
+}
+
+void CphhPrjDlg::drawCircle(CDC* pDC, CRect pRect)
+{
+	CPen penCircle;
+
+	penCircle.CreatePen(PS_SOLID, 5, RGB(0xff, 0xff, 0));
+
+	pDC->SelectObject(&penCircle);
+	pDC->Ellipse(pRect);
+}
+
+void CphhPrjDlg::drawLine(CDC* pDC, CRect pRect, int pLength)
+{
+	int nCPosL = pRect.left;
+	int nCPosT = pRect.top;
+	int nCPosR = pRect.right;
+	int nCPosB = pRect.bottom;
+	int nSumX = nCPosL + nCPosR;
+	
+	int nSumY = nCPosB + nCPosT;
+	int nCenterX = nSumX / 2.0;
+	int nCenterY = nSumY / 2.0;
+	
+
+	CPen penLine;
+	penLine.CreatePen(PS_SOLID, 1, RGB(0xff, 0, 0));
+	pDC->SelectObject(&penLine);
+	pDC->MoveTo(nCenterX - pLength, nCenterY);
+	pDC->LineTo(nCenterX + pLength, nCenterY);
+
+	pDC->MoveTo(nCenterX, nCenterY - pLength);
+	pDC->LineTo(nCenterX, nCenterY + pLength);
+}
+
+void CphhPrjDlg::drawBackColor()
+{
+	CDC* nDC = m_pDlgImage->GetDC();
+	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
+	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
+	CRect nRect(0, 0, nCMaxX, nCMaxY);
+	COLORREF fillColor = RGB(backColorRed, backColorGreen, backColorBlue);
+	nDC->FillSolidRect(nRect, fillColor);
+}
+
+void CphhPrjDlg::OnBnClickedBtnChangeColor()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CString sColorRed;
+	CString sColorGreen;
+	CString sColorBlue;
+	m_editRGBRed.GetWindowText(sColorRed);
+	m_editRGBGreen.GetWindowText(sColorGreen);
+	m_editRGBBlue.GetWindowText(sColorBlue);
+	backColorRed = _ttoi(sColorRed);
+	backColorGreen = _ttoi(sColorGreen);
+	backColorBlue = _ttoi(sColorBlue);
+	if (backColorRed < 255 && backColorGreen < 255 && backColorBlue < 255) {
+		if (0 <= backColorRed && 0 <= backColorGreen && 0 <= backColorBlue) {
+			UpdateData();
+			m_editRGB.Format(_T("%s, %s, %s"), sColorRed, sColorGreen, sColorBlue);
+			CDC* pDC = m_editRGBView.GetDC();
+			CRect rect;
+			m_editRGBView.GetClientRect(&rect);
+			pDC->FillSolidRect(rect, RGB(backColorRed, backColorGreen, backColorBlue));
+			m_editRGBView.ReleaseDC(pDC);
+			UpdateData(FALSE);
+		}
+		
+	}
+	
+	
+	
+	
+
 }

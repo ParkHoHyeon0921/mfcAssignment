@@ -9,8 +9,22 @@
 #define IDD_DLGIMAGE                    103
 #define IDR_MAINFRAME                   128
 #define IDC_BTN_MAKE_CIRCLE             1001
+#define IDC_BTN_CHANGE_COLOR            1002
 #define IDC_EDIT_RAIDUS                 1003
+#define IDC_EDIT_CENTER_X               1004
 #define IDC_STATIC_Label                1005
+#define IDC_STATIC_Label2               1006
+#define IDC_EDIT_CENTER_Y               1007
+#define IDC_STATIC_Label3               1008
+#define IDC_EDIT_RGB_RED                1009
+#define IDC_STATIC_Label4               1012
+#define IDC_STATIC_Label5               1013
+#define IDC_EDIT_RGB                    1015
+#define IDC_EDIT_RGB_GREEN              1016
+#define IDC_STATIC_Label6               1017
+#define IDC_EDIT_RGB_BLUE               1020
+#define IDC_STATIC_Label7               1021
+#define IDC_EDIT_RGB_VIEW               1022
 
 // Next default values for new objects
 // 

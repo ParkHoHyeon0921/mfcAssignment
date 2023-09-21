@@ -3,6 +3,9 @@
 //
 #include "DlgImage.h"
 
+#define MAIN_WIDTH 1280
+#define MAIN_HEIGHT 800
+
 #pragma once
 
 
@@ -41,4 +44,21 @@ public:
 	CEdit m_editRadius;
 	CStatic m_stcRadius;
 	afx_msg void OnBnClickedBtnMakeCircle();
+	CRect rectData(double nDiameter);
+	void drawLine(CDC* pDC, CRect rect, int pLength);
+	void drawCircle(CDC* pDC, CRect pRect);
+	void drawBackColor();
+	int backColorRed;
+	int backColorGreen;
+	int backColorBlue;
+	// 중심값 x좌표
+	CString editCenterX;
+	// 중심값 Y 좌표
+	CString editCenterY;
+	afx_msg void OnBnClickedBtnChangeColor();
+	CEdit m_editRGBRed;
+	CEdit m_editRGBGreen;
+	CEdit m_editRGBBlue;
+	CString m_editRGB;
+	CEdit m_editRGBView;
 };

@@ -1,6 +1,7 @@
 ﻿// DlgImage.cpp: 구현 파일
 //
 
+
 #include "pch.h"
 #include "phh_Prj.h"
 #include "afxdialogex.h"
@@ -41,9 +42,7 @@ BOOL CDlgImage::OnInitDialog()
 
 	// TODO:  여기에 추가 초기화 작업을 추가합니다.
 	MoveWindow(0, 0, 640, 480);
-	InitImage();
-
-	
+	InitImage(COLOR_NUM);
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
@@ -61,7 +60,7 @@ void CDlgImage::OnPaint()
 }
 
 
-void CDlgImage::InitImage()
+void CDlgImage::InitImage(int pBColor)
 {
 	int nWidth = 1000;
 	int nHeight = 800;
@@ -75,9 +74,9 @@ void CDlgImage::InitImage()
 		}
 		m_Image.SetColorTable(0, 256, rgb);
 	}
-
 	int nPitch = m_Image.GetPitch();
+	
 	unsigned char* fm = (unsigned char*)m_Image.GetBits();
-
-	memset(fm, 0xff, nWidth * nHeight);
+	
+	memset(fm, pBColor, nWidth * nHeight);
 }

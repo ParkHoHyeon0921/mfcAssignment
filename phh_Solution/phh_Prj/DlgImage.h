@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "afxdialogex.h"
-
+#define COLOR_NUM	0x70
 
 // CDlgImage 대화 상자
 
@@ -27,5 +27,7 @@ protected:
 public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
-	void InitImage();
+	void InitImage(int pBColor);
+
+private:
 };

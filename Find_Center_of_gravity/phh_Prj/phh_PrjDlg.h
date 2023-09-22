@@ -15,8 +15,6 @@ class CphhPrjDlg : public CDialogEx
 // 생성입니다.
 public:
 	CphhPrjDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
-
-	
 	CDlgImage *m_pDlgImage;
 
 // 대화 상자 데이터입니다.
@@ -44,9 +42,9 @@ public:
 	CEdit m_editRadius;
 	CStatic m_stcRadius;
 	afx_msg void OnBnClickedBtnMakeCircle();
-	CRect rectData(double nDiameter);
-	void drawLine(CDC* pDC, CRect rect, int pLength);
-	void drawCircle(CDC* pDC, CRect pRect);
+	CRect rectData(int nRadius);
+	void drawLine(CRect rect, int ength);
+	void drawCircle(CRect rect);
 	void drawBackColor();
 	int backColorRed;
 	int backColorGreen;
@@ -61,4 +59,5 @@ public:
 	CEdit m_editRGBBlue;
 	CString m_editRGB;
 	CEdit m_editRGBView;
+	void CphhPrjDlg::defaultSet();
 };

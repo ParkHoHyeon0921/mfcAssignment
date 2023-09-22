@@ -22,7 +22,6 @@ class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
-
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
@@ -52,18 +51,17 @@ END_MESSAGE_MAP()
 // CphhPrjDlg 대화 상자
 
 
-
 CphhPrjDlg::CphhPrjDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_PHH_PRJ_DIALOG, pParent)
-	, editCenterX(_T(""))
-	, editCenterY(_T(""))
+	, m_pDlgImage(nullptr)
+	, editCenterX("0")
+	, editCenterY("0")
 	, backColorRed(0)
 	, backColorGreen(0)
 	, backColorBlue(0)
-	, m_editRGB(_T(""))
+	, m_editRGB("0, 0, 0")
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-
 }
 
 void CphhPrjDlg::DoDataExchange(CDataExchange* pDX)
@@ -125,12 +123,7 @@ BOOL CphhPrjDlg::OnInitDialog()
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	MoveWindow(0, 0, MAIN_WIDTH, MAIN_HEIGHT);
-	
-	m_pDlgImage = new CDlgImage;
-	m_pDlgImage->Create(IDD_DLGIMAGE, this);
-	m_pDlgImage->ShowWindow(SW_SHOW);
-	m_pDlgImage->MoveWindow(0, 0, m_pDlgImage->m_Image.GetWidth(), m_pDlgImage->m_Image.GetHeight());
-
+	defaultSet();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -196,90 +189,97 @@ void CphhPrjDlg::OnDestroy()
 void CphhPrjDlg::OnBnClickedBtnMakeCircle()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	m_pDlgImage->Invalidate();
-	m_pDlgImage->UpdateWindow();
+	// 기존 윈도우 파괴
+	
+
+	// 화면 갱신
+	
 
 	CString strRadius;
 	m_editRadius.GetWindowText(strRadius);
-	double nDiameter = _tstof(strRadius);
-
-	if (nDiameter > 0) {
-		CRect nRect = rectData(nDiameter);
-		CDC* pDC = m_pDlgImage->GetDC();
-		
-		drawBackColor();
-		drawCircle(pDC, nRect); // 원그리기 기능
-		drawLine(pDC, nRect, 5);  // 중심점 십자가 기능
-		
-		ReleaseDC(pDC);
+	int nRadius = _ttoi(strRadius);
+	if (nRadius > 0) {
+		CRect nRect = rectData(nRadius);
+		//drawBackColor();
+		drawCircle(nRect); // 원그리기 기능
+		drawLine(nRect, 5);  // 중심점 십자가 기능
 	}
 }
 
 
-CRect CphhPrjDlg::rectData(double nDiameter)
+CRect CphhPrjDlg::rectData(int nRaidus)
 {
 	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
 	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
-	int nCPosL = rand() % int(nCMaxX - nDiameter);
-	int nCPosT = rand() % int(nCMaxY - nDiameter);
-	double nCPosR = nCPosL + nDiameter;
-	double nCPosB = nCPosT + nDiameter;
-	double nSumX = nCPosL + nCPosR;
-	double nSumY = nCPosB + nCPosT;
-	double nCenterX = nSumX / 2.0;
-	double nCenterY = nSumY / 2.0;
+	int nCPosL = rand() % nCMaxX - nRaidus;
+	int nCPosT = rand() % nCMaxY - nRaidus;
+	int nCPosR = nCPosL + nRaidus;
+	int nCPosB = nCPosT + nRaidus;
+	int nSumX = nCPosL + nCPosR;
+	int nSumY = nCPosB + nCPosT;
+	int nCenterX = nSumX / 2;
+	int nCenterY = nSumY / 2;
 	UpdateData();
-	editCenterX.Format(_T("%f"), nCenterX);
-	editCenterY.Format(_T("%f"), nCenterY);
+	editCenterX.Format(_T("%d"), nCenterX);
+	editCenterY.Format(_T("%d"), nCenterY);
 	UpdateData(FALSE);
-	
 
 	CRect rect(nCPosL, nCPosT, nCPosR, nCPosB);
-	
 	return rect;
 }
 
-void CphhPrjDlg::drawCircle(CDC* pDC, CRect pRect)
+void CphhPrjDlg::drawCircle(CRect rect)
 {
+	CDC* pDC = m_pDlgImage->GetDC();
 	CPen penCircle;
+	CRect nRect = rect;
 
 	penCircle.CreatePen(PS_SOLID, 5, RGB(0xff, 0xff, 0));
 
 	pDC->SelectObject(&penCircle);
-	pDC->Ellipse(pRect);
+	pDC->Ellipse(rect);
+	m_pDlgImage->ReleaseDC(pDC);
 }
 
-void CphhPrjDlg::drawLine(CDC* pDC, CRect pRect, int pLength)
+void CphhPrjDlg::drawLine(CRect rect, int length)
 {
-	int nCPosL = pRect.left;
-	int nCPosT = pRect.top;
-	int nCPosR = pRect.right;
-	int nCPosB = pRect.bottom;
+	CDC* pDC = m_pDlgImage->GetDC();
+	CRect nRect = rect;
+
+	int nLength = length;
+	int nCPosL = nRect.left;
+	int nCPosT = nRect.top;
+	int nCPosR = nRect.right;
+	int nCPosB = nRect.bottom;
 	int nSumX = nCPosL + nCPosR;
 	
 	int nSumY = nCPosB + nCPosT;
-	int nCenterX = nSumX / 2.0;
-	int nCenterY = nSumY / 2.0;
+	int nCenterX = (int)(nSumX / 2.0);
+	int nCenterY = (int)(nSumY / 2.0);
 	
 
 	CPen penLine;
 	penLine.CreatePen(PS_SOLID, 1, RGB(0xff, 0, 0));
 	pDC->SelectObject(&penLine);
-	pDC->MoveTo(nCenterX - pLength, nCenterY);
-	pDC->LineTo(nCenterX + pLength, nCenterY);
+	pDC->MoveTo(nCenterX - nLength, nCenterY);
+	pDC->LineTo(nCenterX + nLength, nCenterY);
 
-	pDC->MoveTo(nCenterX, nCenterY - pLength);
-	pDC->LineTo(nCenterX, nCenterY + pLength);
+	pDC->MoveTo(nCenterX, nCenterY - nLength);
+	pDC->LineTo(nCenterX, nCenterY + nLength);
+	m_pDlgImage->ReleaseDC(pDC);
 }
 
 void CphhPrjDlg::drawBackColor()
 {
-	CDC* nDC = m_pDlgImage->GetDC();
+	CDC* pDC = m_pDlgImage->GetDC();
+
 	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
 	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
+
 	CRect nRect(0, 0, nCMaxX, nCMaxY);
 	COLORREF fillColor = RGB(backColorRed, backColorGreen, backColorBlue);
-	nDC->FillSolidRect(nRect, fillColor);
+	pDC->FillSolidRect(nRect, fillColor);
+	m_pDlgImage->ReleaseDC(pDC);
 }
 
 void CphhPrjDlg::OnBnClickedBtnChangeColor()
@@ -291,25 +291,29 @@ void CphhPrjDlg::OnBnClickedBtnChangeColor()
 	m_editRGBRed.GetWindowText(sColorRed);
 	m_editRGBGreen.GetWindowText(sColorGreen);
 	m_editRGBBlue.GetWindowText(sColorBlue);
+
 	backColorRed = _ttoi(sColorRed);
 	backColorGreen = _ttoi(sColorGreen);
 	backColorBlue = _ttoi(sColorBlue);
+
 	if (backColorRed < 256 && backColorGreen < 256 && backColorBlue < 256) {
 		if (0 <= backColorRed && 0 <= backColorGreen && 0 <= backColorBlue) {
-			UpdateData();
-			m_editRGB.Format(_T("%s, %s, %s"), sColorRed, sColorGreen, sColorBlue);
+			UpdateData(TRUE);
+			m_editRGB.Format(_T("%d, %d, %d"), backColorRed, backColorGreen, backColorBlue);
 			CDC* pDC = m_editRGBView.GetDC();
 			CRect rect;
 			m_editRGBView.GetClientRect(&rect);
 			pDC->FillSolidRect(rect, RGB(backColorRed, backColorGreen, backColorBlue));
-			m_editRGBView.ReleaseDC(pDC);
+			ReleaseDC(pDC);
 			UpdateData(FALSE);
 		}
-		
 	}
-	
-	
-	
-	
+}
 
+void CphhPrjDlg::defaultSet()
+{
+	m_pDlgImage = new CDlgImage;
+	m_pDlgImage->Create(IDD_DLGIMAGE, this);
+	m_pDlgImage->ShowWindow(SW_SHOW);
+	m_pDlgImage->MoveWindow(0, 0, m_pDlgImage->m_Image.GetWidth(), m_pDlgImage->m_Image.GetHeight());
 }

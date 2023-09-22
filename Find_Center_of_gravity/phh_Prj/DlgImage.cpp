@@ -13,8 +13,7 @@
 IMPLEMENT_DYNAMIC(CDlgImage, CDialogEx)
 
 CDlgImage::CDlgImage(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DLGIMAGE, pParent)
-{
+	: CDialogEx(IDD_DLGIMAGE, pParent){
 	m_pParent = pParent;
 }
 
@@ -62,8 +61,8 @@ void CDlgImage::OnPaint()
 
 void CDlgImage::InitImage(int pBColor)
 {
-	int nWidth = 1000;
-	int nHeight = 800;
+	int nWidth = IMAGE_WIDTH;
+	int nHeight = IMAGE_HEIGHT;
 	int nBpp = 8;
 
 	m_Image.Create(nWidth, -nHeight, nBpp);

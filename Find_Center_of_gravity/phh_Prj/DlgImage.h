@@ -3,7 +3,6 @@
 
 #define IMAGE_WIDTH		1000
 #define IMAGE_HEIGHT	800
-#define COLOR_NUM		0x70
 
 // CDlgImage 대화 상자
 
@@ -30,6 +29,6 @@ protected:
 public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
-	void InitImage(int pBColor);
+	void InitImage();
 private:
 };

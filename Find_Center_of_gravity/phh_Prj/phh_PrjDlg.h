@@ -43,7 +43,7 @@ public:
 	CStatic m_stcRadius;
 	afx_msg void OnBnClickedBtnMakeCircle();
 	CRect rectData(int nRadius);
-	void drawLine(CRect rect, int ength);
+	void drawLine(CRect rect, int Length);
 	void drawCircle(CRect rect);
 	void drawBackColor();
 	int backColorRed;
@@ -60,4 +60,5 @@ public:
 	CString m_editRGB;
 	CEdit m_editRGBView;
 	void CphhPrjDlg::defaultSet();
+	COLORREF bakcColor;
 };

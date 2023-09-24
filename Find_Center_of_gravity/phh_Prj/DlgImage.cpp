@@ -41,7 +41,7 @@ BOOL CDlgImage::OnInitDialog()
 
 	// TODO:  여기에 추가 초기화 작업을 추가합니다.
 	MoveWindow(0, 0, 640, 480);
-	InitImage(COLOR_NUM);
+	InitImage();
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
@@ -59,7 +59,7 @@ void CDlgImage::OnPaint()
 }
 
 
-void CDlgImage::InitImage(int pBColor)
+void CDlgImage::InitImage()
 {
 	int nWidth = IMAGE_WIDTH;
 	int nHeight = IMAGE_HEIGHT;
@@ -77,5 +77,5 @@ void CDlgImage::InitImage(int pBColor)
 	
 	unsigned char* fm = (unsigned char*)m_Image.GetBits();
 	
-	memset(fm, pBColor, nWidth * nHeight);
+	memset(fm, 0, nWidth * nHeight);
 }

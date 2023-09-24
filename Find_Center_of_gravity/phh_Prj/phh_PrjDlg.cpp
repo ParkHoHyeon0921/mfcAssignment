@@ -60,6 +60,7 @@ CphhPrjDlg::CphhPrjDlg(CWnd* pParent /*=nullptr*/)
 	, backColorGreen(0)
 	, backColorBlue(0)
 	, m_editRGB("0, 0, 0")
+	, bakcColor(0xff)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -188,19 +189,17 @@ void CphhPrjDlg::OnDestroy()
 
 void CphhPrjDlg::OnBnClickedBtnMakeCircle()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	// 기존 윈도우 파괴
-	
-
-	// 화면 갱신
-	
-
 	CString strRadius;
 	m_editRadius.GetWindowText(strRadius);
 	int nRadius = _ttoi(strRadius);
 	if (nRadius > 0) {
 		CRect nRect = rectData(nRadius);
-		//drawBackColor();
+		m_pDlgImage->DestroyWindow();
+		delete m_pDlgImage;
+		defaultSet();
+		m_pDlgImage->Invalidate();
+		m_pDlgImage->UpdateWindow();
+		drawBackColor();
 		drawCircle(nRect); // 원그리기 기능
 		drawLine(nRect, 5);  // 중심점 십자가 기능
 	}
@@ -209,10 +208,11 @@ void CphhPrjDlg::OnBnClickedBtnMakeCircle()
 
 CRect CphhPrjDlg::rectData(int nRaidus)
 {
+
 	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
 	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
-	int nCPosL = rand() % nCMaxX - nRaidus;
-	int nCPosT = rand() % nCMaxY - nRaidus;
+	int nCPosL = rand() % (nCMaxX - nRaidus);
+	int nCPosT = rand() % (nCMaxY - nRaidus);
 	int nCPosR = nCPosL + nRaidus;
 	int nCPosB = nCPosT + nRaidus;
 	int nSumX = nCPosL + nCPosR;
@@ -228,16 +228,16 @@ CRect CphhPrjDlg::rectData(int nRaidus)
 	return rect;
 }
 
-void CphhPrjDlg::drawCircle(CRect rect)
+void CphhPrjDlg::drawCircle(CRect Rect)
 {
 	CDC* pDC = m_pDlgImage->GetDC();
 	CPen penCircle;
-	CRect nRect = rect;
+	
 
 	penCircle.CreatePen(PS_SOLID, 5, RGB(0xff, 0xff, 0));
 
 	pDC->SelectObject(&penCircle);
-	pDC->Ellipse(rect);
+	pDC->Ellipse(Rect);
 	m_pDlgImage->ReleaseDC(pDC);
 }
 
@@ -271,15 +271,16 @@ void CphhPrjDlg::drawLine(CRect rect, int length)
 
 void CphhPrjDlg::drawBackColor()
 {
+	
 	CDC* pDC = m_pDlgImage->GetDC();
+    int nCMaxX = m_pDlgImage->m_Image.GetWidth();
+    int nCMaxY = m_pDlgImage->m_Image.GetHeight();
 
-	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
-	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
-
-	CRect nRect(0, 0, nCMaxX, nCMaxY);
-	COLORREF fillColor = RGB(backColorRed, backColorGreen, backColorBlue);
-	pDC->FillSolidRect(nRect, fillColor);
-	m_pDlgImage->ReleaseDC(pDC);
+    CRect nRect(0, 0, nCMaxX, nCMaxY);
+	bakcColor = RGB(backColorRed, backColorGreen, backColorBlue);
+    pDC->FillSolidRect(nRect, bakcColor);
+	
+    m_pDlgImage->ReleaseDC(pDC);
 }
 
 void CphhPrjDlg::OnBnClickedBtnChangeColor()
@@ -306,6 +307,7 @@ void CphhPrjDlg::OnBnClickedBtnChangeColor()
 			pDC->FillSolidRect(rect, RGB(backColorRed, backColorGreen, backColorBlue));
 			ReleaseDC(pDC);
 			UpdateData(FALSE);
+			drawBackColor();
 		}
 	}
 }
@@ -316,4 +318,5 @@ void CphhPrjDlg::defaultSet()
 	m_pDlgImage->Create(IDD_DLGIMAGE, this);
 	m_pDlgImage->ShowWindow(SW_SHOW);
 	m_pDlgImage->MoveWindow(0, 0, m_pDlgImage->m_Image.GetWidth(), m_pDlgImage->m_Image.GetHeight());
+	
 }

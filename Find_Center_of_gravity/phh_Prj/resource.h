@@ -17,6 +17,8 @@
 #define IDC_EDIT_CENTER_Y               1007
 #define IDC_STATIC_Label3               1008
 #define IDC_EDIT_RGB_RED                1009
+#define IDC_BUTTON1                     1010
+#define IDC_BTN_FIND_CENTER             1010
 #define IDC_STATIC_Label4               1012
 #define IDC_STATIC_Label5               1013
 #define IDC_EDIT_RGB                    1015
@@ -32,7 +34,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        131
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1006
+#define _APS_NEXT_CONTROL_VALUE         1011
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

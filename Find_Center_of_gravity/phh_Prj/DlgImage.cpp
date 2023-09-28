@@ -63,19 +63,20 @@ void CDlgImage::InitImage()
 {
 	int nWidth = IMAGE_WIDTH;
 	int nHeight = IMAGE_HEIGHT;
-	int nBpp = 8;
+	int nBpp = 24;
 
 	m_Image.Create(nWidth, -nHeight, nBpp);
-	if (nBpp == 8) {
+	/*if (nBpp == 8) {
 		static RGBQUAD rgb[256];
 		for (int i = 0; i < 256; i++) {
 			rgb[i].rgbRed = rgb[i].rgbGreen = rgb[i].rgbBlue = i;
 		}
 		m_Image.SetColorTable(0, 256, rgb);
-	}
+	}*/
+	
 	int nPitch = m_Image.GetPitch();
 	
 	unsigned char* fm = (unsigned char*)m_Image.GetBits();
 	
-	memset(fm, 0, nWidth * nHeight);
+	memset(fm, 0xff, nWidth * nHeight * 3);
 }

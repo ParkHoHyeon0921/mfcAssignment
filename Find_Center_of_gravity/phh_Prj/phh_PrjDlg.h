@@ -12,21 +12,21 @@
 // CphhPrjDlg 대화 상자
 class CphhPrjDlg : public CDialogEx
 {
-// 생성입니다.
+	// 생성입니다.
 public:
 	CphhPrjDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
-	CDlgImage *m_pDlgImage;
+	CDlgImage* m_pDlgImage;
 
-// 대화 상자 데이터입니다.
+	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_PHH_PRJ_DIALOG };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 
 
-// 구현입니다.
+	// 구현입니다.
 protected:
 	HICON m_hIcon;
 
@@ -44,7 +44,7 @@ public:
 	afx_msg void OnBnClickedBtnMakeCircle();
 	CRect rectData(int nRadius);
 	void drawLine(CRect rect, int Length);
-	void drawCircle(CRect rect);
+	void drawCircle(int Raidus);
 	void drawBackColor();
 	int backColorRed;
 	int backColorGreen;
@@ -61,4 +61,10 @@ public:
 	CEdit m_editRGBView;
 	void CphhPrjDlg::defaultSet();
 	COLORREF bakcColor;
+private:
+	bool isInCircle(int i, int j, int nCenterX, int nCenterY, int Raidus);
+	BOOL validImgPos(int x, int y);
+
+public:
+	afx_msg void OnBnClickedBtnFindCenter();
 };

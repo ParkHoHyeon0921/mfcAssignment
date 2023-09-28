@@ -210,7 +210,7 @@ void CphhPrjDlg::OnBnClickedBtnMakeCircle()
 CRect CphhPrjDlg::rectData(int nRaidus)
 {
 
-	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
+	/*int nCMaxX = m_pDlgImage->m_Image.GetWidth();
 	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
 	int nCPosL = rand() % (nCMaxX - nRaidus);
 	int nCPosT = rand() % (nCMaxY - nRaidus);
@@ -226,7 +226,7 @@ CRect CphhPrjDlg::rectData(int nRaidus)
 	UpdateData(FALSE);
 
 	CRect rect(nCPosL, nCPosT, nCPosR, nCPosB);
-	return rect;
+	return rect;*/
 }
 
 void CphhPrjDlg::drawCircle(int Raidus)
@@ -309,7 +309,7 @@ BOOL CphhPrjDlg::validImgPos(int x, int y)
 
 void CphhPrjDlg::drawLine(CRect rect, int length)
 {
-	CDC* pDC = m_pDlgImage->GetDC();
+	/*CDC* pDC = m_pDlgImage->GetDC();
 	CRect nRect = rect;
 
 	int nLength = length;
@@ -332,13 +332,13 @@ void CphhPrjDlg::drawLine(CRect rect, int length)
 
 	pDC->MoveTo(nCenterX, nCenterY - nLength);
 	pDC->LineTo(nCenterX, nCenterY + nLength);
-	m_pDlgImage->ReleaseDC(pDC);
+	m_pDlgImage->ReleaseDC(pDC);*/
 }
 
 void CphhPrjDlg::drawBackColor()
 {
 
-	CDC* pDC = m_pDlgImage->GetDC();
+	/*CDC* pDC = m_pDlgImage->GetDC();
 	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
 	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
 
@@ -346,13 +346,13 @@ void CphhPrjDlg::drawBackColor()
 	bakcColor = RGB(backColorRed, backColorGreen, backColorBlue);
 	pDC->FillSolidRect(nRect, bakcColor);
 
-	m_pDlgImage->ReleaseDC(pDC);
+	m_pDlgImage->ReleaseDC(pDC);*/
 }
 
 void CphhPrjDlg::OnBnClickedBtnChangeColor()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	CString sColorRed;
+	/*CString sColorRed;
 	CString sColorGreen;
 	CString sColorBlue;
 	m_editRGBRed.GetWindowText(sColorRed);
@@ -375,7 +375,7 @@ void CphhPrjDlg::OnBnClickedBtnChangeColor()
 			UpdateData(FALSE);
 			drawBackColor();
 		}
-	}
+	}*/
 }
 
 void CphhPrjDlg::defaultSet()

@@ -246,6 +246,7 @@ void CphhPrjDlg::drawCircle(int Raidus)
 	int nPitch = m_pDlgImage->m_Image.GetPitch();
 	int x = rand() % nWidth;
 	int y = rand() % nHeight;
+
 	int nCenterX = x + Raidus;
 	int nCenterY = y + Raidus;
 
@@ -395,7 +396,7 @@ void CphhPrjDlg::OnBnClickedBtnFindCenter()
 	int nHeight = m_pDlgImage->m_Image.GetHeight();
 	int nPitch = m_pDlgImage->m_Image.GetPitch();
 
-	int nTh = 0x80;
+	int nTh = 0x50;
 	CRect rect(0, 0, nWidth, nHeight);
 	int nSumX = 0;
 	int nSumY = 0;

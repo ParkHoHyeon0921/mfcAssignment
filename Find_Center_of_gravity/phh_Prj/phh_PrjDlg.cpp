@@ -251,7 +251,7 @@ void CphhPrjDlg::drawCircle(int Raidus)
 	int nCenterX = x + Raidus;
 	int nCenterY = y + Raidus;
 
-	memset(fm, 0xff, nWidth * nHeight * 3);
+	memset(fm, 0x80, nWidth * nHeight * 3);
 
 	for (int j = y; j < y + Raidus * 2; j++) {
 		for (int i = x; i < x + Raidus * 2; i++) {
@@ -348,7 +348,7 @@ void CphhPrjDlg::drawLine(CRect rect, int length)
 void CphhPrjDlg::drawBackColor()
 {
 
-	CDC* pDC = m_pDlgImage->GetDC();
+	/*CDC* pDC = m_pDlgImage->GetDC();
 	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
 	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
 
@@ -356,12 +356,12 @@ void CphhPrjDlg::drawBackColor()
 	bakcColor = RGB(backColorRed, backColorGreen, backColorBlue);
 	pDC->FillSolidRect(nRect, bakcColor);
 
-	m_pDlgImage->ReleaseDC(pDC);
+	m_pDlgImage->ReleaseDC(pDC);*/
 }
 
 void CphhPrjDlg::OnBnClickedBtnChangeColor()
 {
-	CString sColorRed;
+	/*CString sColorRed;
 	CString sColorGreen;
 	CString sColorBlue;
 	m_editRGBRed.GetWindowText(sColorRed);
@@ -384,7 +384,7 @@ void CphhPrjDlg::OnBnClickedBtnChangeColor()
 			UpdateData(FALSE);
 			drawBackColor();
 		}
-	}
+	}*/
 }
 
 void CphhPrjDlg::defaultSet()
@@ -405,7 +405,7 @@ void CphhPrjDlg::OnBnClickedBtnFindCenter()
 	int nHeight = m_pDlgImage->m_Image.GetHeight();
 	int nPitch = m_pDlgImage->m_Image.GetPitch();
 
-	int nTh = 0x80;
+	int nTh = 0x50;
 	CRect rect(0, 0, nWidth, nHeight);
 	int nSumX = 0;
 	int nSumY = 0;

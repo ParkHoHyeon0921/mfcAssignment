@@ -78,5 +78,5 @@ void CDlgImage::InitImage()
 	
 	unsigned char* fm = (unsigned char*)m_Image.GetBits();
 	
-	memset(fm, 0x80, nWidth * nHeight * 3);
+	memset(fm, 255, nWidth * nHeight * 3);
 }

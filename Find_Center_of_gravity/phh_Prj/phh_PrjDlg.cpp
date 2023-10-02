@@ -251,7 +251,7 @@ void CphhPrjDlg::drawCircle(int Raidus)
 	int nCenterX = x + Raidus;
 	int nCenterY = y + Raidus;
 
-	memset(fm, 0x80, nWidth * nHeight * 3);
+	memset(fm, 255, nWidth * nHeight * 3);
 
 	for (int j = y; j < y + Raidus * 2; j++) {
 		for (int i = x; i < x + Raidus * 2; i++) {
@@ -262,12 +262,12 @@ void CphhPrjDlg::drawCircle(int Raidus)
 					fm[j * nPitch + i * 3 + 1] = 0xff;
 					fm[j * nPitch + i * 3 + 2] = 0xff;
 				}
-				else if (nCircleSwitch == 2){
+				else if (nCircleSwitch == 2) {
 					fm[j * nPitch + i * 3 + 0] = 0xff;
 					fm[j * nPitch + i * 3 + 1] = 0xff;
 					fm[j * nPitch + i * 3 + 2] = 0xff;
 				}
-				
+
 				if (j == nCenterY) {
 					if (i > nCenterX - 10 && i < nCenterX + 10) {
 						fm[j * nPitch + i * 3 + 0] = 0;
@@ -405,14 +405,16 @@ void CphhPrjDlg::OnBnClickedBtnFindCenter()
 	int nHeight = m_pDlgImage->m_Image.GetHeight();
 	int nPitch = m_pDlgImage->m_Image.GetPitch();
 
-	int nTh = 0x50;
+	int nTh = 0;
 	CRect rect(0, 0, nWidth, nHeight);
 	int nSumX = 0;
 	int nSumY = 0;
 	int nCount = 0;
 	for (int j = rect.top; j < rect.bottom; j++) {
 		for (int i = rect.left; i < rect.right; i++) {
-			if (fm[j * nPitch + i * 3] < nTh) {
+			if (fm[j * nPitch + i * 3] == nTh) {
+				/*int nTh_1 = fm[j * nPitch + i * 3];
+				std::cout << nTh_1 << std::endl;*/
 				nSumX += i;
 				nSumY += j;
 				nCount++;

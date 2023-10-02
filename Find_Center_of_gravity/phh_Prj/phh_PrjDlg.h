@@ -42,7 +42,7 @@ public:
 	CEdit m_editRadius;
 	CStatic m_stcRadius;
 	afx_msg void OnBnClickedBtnMakeCircle();
-	CRect rectData(int nRadius);
+	//CRect rectData(int nRadius);
 	void drawLine(CRect rect, int Length);
 	void drawCircle(int Raidus);
 	void drawBackColor();
@@ -62,8 +62,9 @@ public:
 	void CphhPrjDlg::defaultSet();
 	COLORREF bakcColor;
 private:
-	bool isInCircle(int i, int j, int nCenterX, int nCenterY, int Raidus);
+	int isInCircle(int i, int j, int nCenterX, int nCenterY, int Raidus);
 	BOOL validImgPos(int x, int y);
+	int nBackcolor;
 
 public:
 	afx_msg void OnBnClickedBtnFindCenter();

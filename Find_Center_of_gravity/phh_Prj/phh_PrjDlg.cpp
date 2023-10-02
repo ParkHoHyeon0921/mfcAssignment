@@ -61,6 +61,7 @@ CphhPrjDlg::CphhPrjDlg(CWnd* pParent /*=nullptr*/)
 	, backColorBlue(0)
 	, m_editRGB("0, 0, 0")
 	, bakcColor(0xff)
+	, nBackcolor(0x80)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -207,27 +208,27 @@ void CphhPrjDlg::OnBnClickedBtnMakeCircle()
 }
 
 
-CRect CphhPrjDlg::rectData(int nRaidus)
-{
-
-	/*int nCMaxX = m_pDlgImage->m_Image.GetWidth();
-	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
-	int nCPosL = rand() % (nCMaxX - nRaidus);
-	int nCPosT = rand() % (nCMaxY - nRaidus);
-	int nCPosR = nCPosL + nRaidus;
-	int nCPosB = nCPosT + nRaidus;
-	int nSumX = nCPosL + nCPosR;
-	int nSumY = nCPosB + nCPosT;
-	int nCenterX = nSumX / 2;
-	int nCenterY = nSumY / 2;
-	UpdateData();
-	editCenterX.Format(_T("%d"), nCenterX);
-	editCenterY.Format(_T("%d"), nCenterY);
-	UpdateData(FALSE);
-
-	CRect rect(nCPosL, nCPosT, nCPosR, nCPosB);
-	return rect;*/
-}
+//CRect CphhPrjDlg::rectData(int nRaidus)
+//{
+//
+//	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
+//	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
+//	int nCPosL = rand() % (nCMaxX - nRaidus);
+//	int nCPosT = rand() % (nCMaxY - nRaidus);
+//	int nCPosR = nCPosL + nRaidus;
+//	int nCPosB = nCPosT + nRaidus;
+//	int nSumX = nCPosL + nCPosR;
+//	int nSumY = nCPosB + nCPosT;
+//	int nCenterX = nSumX / 2;
+//	int nCenterY = nSumY / 2;
+//	UpdateData();
+//	editCenterX.Format(_T("%d"), nCenterX);
+//	editCenterY.Format(_T("%d"), nCenterY);
+//	UpdateData(FALSE);
+//
+//	CRect rect(nCPosL, nCPosT, nCPosR, nCPosB);
+//	return rect;
+//}
 
 void CphhPrjDlg::drawCircle(int Raidus)
 {
@@ -255,11 +256,18 @@ void CphhPrjDlg::drawCircle(int Raidus)
 	for (int j = y; j < y + Raidus * 2; j++) {
 		for (int i = x; i < x + Raidus * 2; i++) {
 			if (validImgPos(i, j)) {
-				if (isInCircle(i, j, nCenterX, nCenterY, Raidus)) {
+				int nCircleSwitch = isInCircle(i, j, nCenterX, nCenterY, Raidus);
+				if (nCircleSwitch == 1) {
 					fm[j * nPitch + i * 3 + 0] = 0;
 					fm[j * nPitch + i * 3 + 1] = 0xff;
 					fm[j * nPitch + i * 3 + 2] = 0xff;
 				}
+				else if (nCircleSwitch == 2){
+					fm[j * nPitch + i * 3 + 0] = 0xff;
+					fm[j * nPitch + i * 3 + 1] = 0xff;
+					fm[j * nPitch + i * 3 + 2] = 0xff;
+				}
+				
 				if (j == nCenterY) {
 					if (i > nCenterX - 10 && i < nCenterX + 10) {
 						fm[j * nPitch + i * 3 + 0] = 0;
@@ -275,14 +283,13 @@ void CphhPrjDlg::drawCircle(int Raidus)
 					}
 				}
 			}
-
 		}
 	}
 	m_pDlgImage->Invalidate();
 }
-bool CphhPrjDlg::isInCircle(int i, int j, int nCenterX, int nCenterY, int nRaidus)
+int CphhPrjDlg::isInCircle(int i, int j, int nCenterX, int nCenterY, int nRaidus)
 {
-	bool bRet = false;
+	int bRet = 0;
 
 	double dX = i - nCenterX;
 	double dY = j - nCenterY;
@@ -290,10 +297,13 @@ bool CphhPrjDlg::isInCircle(int i, int j, int nCenterX, int nCenterY, int nRaidu
 	int nArea = nRaidus * nRaidus;
 	int nRound = 5; // 원의 둘레
 	if (dDist < nArea) {
-		//bRet = true;
+		//bRet = 1;
 		if (dDist > (nRaidus - nRound) * (nRaidus - nRound))
 		{
-			bRet = true;
+			bRet = 1;
+		}
+		else {
+			bRet = 2;
 		}
 	}
 	return bRet;
@@ -338,7 +348,7 @@ void CphhPrjDlg::drawLine(CRect rect, int length)
 void CphhPrjDlg::drawBackColor()
 {
 
-	/*CDC* pDC = m_pDlgImage->GetDC();
+	CDC* pDC = m_pDlgImage->GetDC();
 	int nCMaxX = m_pDlgImage->m_Image.GetWidth();
 	int nCMaxY = m_pDlgImage->m_Image.GetHeight();
 
@@ -346,13 +356,12 @@ void CphhPrjDlg::drawBackColor()
 	bakcColor = RGB(backColorRed, backColorGreen, backColorBlue);
 	pDC->FillSolidRect(nRect, bakcColor);
 
-	m_pDlgImage->ReleaseDC(pDC);*/
+	m_pDlgImage->ReleaseDC(pDC);
 }
 
 void CphhPrjDlg::OnBnClickedBtnChangeColor()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	/*CString sColorRed;
+	CString sColorRed;
 	CString sColorGreen;
 	CString sColorBlue;
 	m_editRGBRed.GetWindowText(sColorRed);
@@ -375,7 +384,7 @@ void CphhPrjDlg::OnBnClickedBtnChangeColor()
 			UpdateData(FALSE);
 			drawBackColor();
 		}
-	}*/
+	}
 }
 
 void CphhPrjDlg::defaultSet()
@@ -396,14 +405,14 @@ void CphhPrjDlg::OnBnClickedBtnFindCenter()
 	int nHeight = m_pDlgImage->m_Image.GetHeight();
 	int nPitch = m_pDlgImage->m_Image.GetPitch();
 
-	int nTh = 0x50;
+	int nTh = 0x80;
 	CRect rect(0, 0, nWidth, nHeight);
 	int nSumX = 0;
 	int nSumY = 0;
 	int nCount = 0;
 	for (int j = rect.top; j < rect.bottom; j++) {
 		for (int i = rect.left; i < rect.right; i++) {
-			if (fm[j * nPitch + i * 3] > nTh) {
+			if (fm[j * nPitch + i * 3] < nTh) {
 				nSumX += i;
 				nSumY += j;
 				nCount++;
